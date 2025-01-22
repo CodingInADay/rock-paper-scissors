@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fa" style="direction: rtl;">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سنگ، کاغذ، قیچی</title>
+    <style>
+        body {
+            background-color: #1a1a2e;
+            color: #e94560;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: #e94560;
+            margin-bottom: 20px;
+        }
+        .choices {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .choices button {
+            background-color: #0f3460;
+            border: 2px solid #e94560;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .choices button:hover {
+            background-color: #e94560;
+        }
+        .scores {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .result, .computer-thoughts {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #0f3460;
+            border-radius: 5px;
+        }
+        .icon {
+            width: 50px;
+            height: 50px;
+            margin: 10px;
+        }
+        .choice-name {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .choice-display {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .choice-display div {
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>سنگ، کاغذ، قیچی</h1>
+        <div class="scores">
+            <div>
+ <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+</svg>
+                <div>کاربر: <span id="emtiazKarbar">0</span></div>
+            </div>
+            <div>
+          <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M4 4h16v12H4z"/>
+    <path d="M2 18h20v2H2z"/>
+</svg>
+                <div>رایانه: <span id="emtiazComput">0</span></div>
+            </div>
+        </div>
+        <div class="choice-display">
+            <div>
+                <span id="entekkhabKarbar">انتخاب کاربر: -</span>
+            </div>
+            <div>
+                <span id="entekkhabComput">انتخاب رایانه: -</span>
+            </div>
+        </div>
+        <div class="choices">
+            <button onclick="playGame('سنگ')">
+    <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+    <circle cx="12" cy="12" r="10" stroke="black" stroke-width="2" fill="grey"/>
+    <circle cx="12" cy="12" r="6" fill="white"/>
+</svg>
+                <div class="choice-name">سنگ</div>
+            </button>
+            <button onclick="playGame('کاغذ')">
+ <svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+    <rect x="6" y="6" width="12" height="16" stroke="black" stroke-width="2" fill="white"/>
+    <line x1="6" y1="10" x2="18" y2="10" stroke="black" stroke-width="1"/>
+    <line x1="6" y1="14" x2="18" y2="14" stroke="black" stroke-width="1"/>
+    <line x1="6" y1="18" x2="18" y2="18" stroke="black" stroke-width="1"/>
+</svg>
+                <div class="choice-name">کاغذ</div>
+            </button>
+            <button onclick="playGame('قیچی')">
+<svg width="50" height="50" viewBox="0 0 24 24" fill="currentColor">
+    <circle cx="8" cy="8" r="4" stroke="black" stroke-width="2" fill="grey"/>
+    <circle cx="16" cy="8" r="4" stroke="black" stroke-width="2" fill="grey"/>
+    <line x1="8" y1="12" x2="16" y2="20" stroke="black" stroke-width="2"/>
+    <line x1="16" y1="12" x2="8" y2="20" stroke="black" stroke-width="2"/>
+</svg>
+                <div class="choice-name">قیچی</div>
+            </button>
+        </div>
+        <div class="result">
+            <p id="payam">-</p>
+        </div>
+        <div class="computer-thoughts">
+            <p id="computerThoughts">طرز فکر کامپیوتر: -</p>
+            <p id="computerConclusion">نتیجه‌گیری: -</p>
+        </div>
+    </div>
+
+    <script>
+        let emtiazKarbar = 0;
+        let emtiazComput = 0;
+        const playerChoices = { سنگ: 0, کاغذ: 0, قیچی: 0 };
+
+        function playGame(playerChoice) {
+            const entekkhabKarbar = document.getElementById('entekkhabKarbar');
+            const entekkhabComput = document.getElementById('entekkhabComput');
+            const payam = document.getElementById('payam');
+            const computerThoughts = document.getElementById('computerThoughts');
+            const computerConclusion = document.getElementById('computerConclusion');
+
+            // نمایش انتخاب کاربر
+            entekkhabKarbar.textContent = `انتخاب کاربر: ${playerChoice}`;
+            playerChoices[playerChoice]++;
+
+            // انتخاب کامپیوتر و نمایش آن
+            const computerChoice = getComputerChoice();
+            entekkhabComput.textContent = `انتخاب رایانه: ${computerChoice}`;
+
+            // تعیین برنده و به‌روزرسانی امتیازات
+            const winner = determineWinner(playerChoice, computerChoice);
+            updateScores(winner);
+            updateComputerThoughts(computerThoughts, computerConclusion);
+
+            // نمایش نتیجه
+            payam.textContent = winner === 'draw' ? 'مساوی' : `برنده: ${winner === 'player' ? 'کاربر' : 'رایانه'}`;
+        }
+
+        function getComputerChoice() {
+            const total = playerChoices.سنگ + playerChoices.کاغذ + playerChoices.قیچی;
+            if (total === 0) return randomChoice();
+
+            const probabilities = {
+                سنگ: playerChoices.قیچی / total,
+                کاغذ: playerChoices.سنگ / total,
+                قیچی: playerChoices.کاغذ / total
+            };
+
+            const random = Math.random();
+            if (random < probabilities.سنگ) return 'کاغذ';
+            if (random < probabilities.سنگ + probabilities.کاغذ) return 'قیچی';
+            return 'سنگ';
+        }
+
+        function randomChoice() {
+            const choices = ['سنگ', 'کاغذ', 'قیچی'];
+            return choices[Math.floor(Math.random() * 3)];
+        }
+
+        function determineWinner(player, computer) {
+            if (player === computer) return 'draw';
+            if ((player === 'سنگ' && computer === 'قیچی') ||
+                (player === 'کاغذ' && computer === 'سنگ') ||
+                (player === 'قیچی' && computer === 'کاغذ')) {
+                return 'player';
+            }
+            return 'computer';
+        }
+
+        function updateScores(winner) {
+            if (winner === 'player') emtiazKarbar++;
+            if (winner === 'computer') emtiazComput++;
+            document.getElementById('emtiazKarbar').textContent = emtiazKarbar;
+            document.getElementById('emtiazComput').textContent = emtiazComput;
+        }
+
+        function updateComputerThoughts(computerThoughts, computerConclusion) {
+            const total = playerChoices.سنگ + playerChoices.کاغذ + playerChoices.قیچی;
+            if (total === 0) {
+                computerThoughts.textContent = 'طرز فکر کامپیوتر: انتخاب تصادفی';
+                computerConclusion.textContent = 'نتیجه‌گیری: هنوز الگوی انتخاب کاربر مشخص نیست.';
+                return;
+            }
+
+            const سنگPercent = Math.round((playerChoices.سنگ / total) * 100);
+            const کاغذPercent = Math.round((playerChoices.کاغذ / total) * 100);
+            const قیچیPercent = Math.round((playerChoices.قیچی / total) * 100);
+
+            computerThoughts.textContent = `طرز فکر کامپیوتر: سنگ ${سنگPercent}%, کاغذ ${کاغذPercent}%, قیچی ${قیچیPercent}%`;
+
+            if (playerChoices.سنگ > playerChoices.کاغذ && playerChoices.سنگ > playerChoices.قیچی) {
+                computerConclusion.textContent = 'نتیجه‌گیری: پس حالا باید کاغذ انتخاب شود چون کاربر بیشتر سنگ انتخاب کرده.';
+            } else if (playerChoices.کاغذ > playerChoices.سنگ && playerChoices.کاغذ > playerChoices.قیچی) {
+                computerConclusion.textContent = 'نتیجه‌گیری: پس حالا باید قیچی انتخاب شود چون کاربر بیشتر کاغذ انتخاب کرده.';
+            } else if (playerChoices.قیچی > playerChoices.سنگ && playerChoices.قیچی > playerChoices.کاغذ) {
+                computerConclusion.textContent = 'نتیجه‌گیری: پس حالا باید سنگ انتخاب شود چون کاربر بیشتر قیچی انتخاب کرده.';
+            } else {
+                computerConclusion.textContent = 'نتیجه‌گیری: انتخاب‌های کاربر متعادل است، پس انتخاب تصادفی انجام می‌شود.';
+            }
+        }
+    </script>
+</body>
+</html>
